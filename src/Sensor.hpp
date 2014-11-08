@@ -1,7 +1,7 @@
 #ifndef SENSOR_HPP
 #define SENSOR_HPP
 
-#include "proto.h"
+#include "Proto.hpp"
 
 namespace mindspy {
 
@@ -17,7 +17,7 @@ namespace sensor {
          * \param count of samples to get
          * \return result
          */
-        virtual bool getSamples(uint32_t, mindspy_protobufs_Sample*) = 0;
+        virtual bool getSamples(uint32_t, protobufs::Sample*) = 0;
 
         /*!
          * \brief Get State of the sensor (get the registers).
@@ -25,13 +25,13 @@ namespace sensor {
          * \param addresses count
          * \return result states
          */
-        virtual bool getState(uint32_t*, uint32_t, mindspy_protobufs_State*) = 0;
+        virtual bool getState(uint32_t*, uint32_t, protobufs::State*) = 0;
 
         /*!
          * \brief Set State of the sensor (set the registers).
          * \param states to set up
          */
-        virtual bool setState(mindspy_protobufs_State*, uint32_t, void*) = 0;
+        virtual bool setState(protobufs::State*, uint32_t, void*) = 0;
 
         /*!
          * \brief Get model name.
