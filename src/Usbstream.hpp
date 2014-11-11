@@ -1,7 +1,7 @@
 #ifndef USBSTREAM_HPP
 #define USBSTREAM_HPP
 
-#include <libusb.h>
+#include <libusb-1.0/libusb.h>
 
 namespace MindSpy
 {
@@ -19,22 +19,41 @@ public:
      */
     UsbStream();
 
+    ~UsbStream();
+
 private:
 
     /*
-     * Open usb device.s
+     * Open usb devices.
      */
-    libusb_device **device;
+    libusb_device **devices;
 
     /*
      * Device handle for I/O operation.
      */
-    libusb_device_handle *dev_handle;
+    libusb_device_handle *deviceHandle;
+
 
     /*
      * Create usb context.
      */
-    libusb_context *context;
+    libusb_context *deviceContext;
+
+    /*
+     * Number of find devices.
+     */
+    int numberOfDevices;
+
+    /*
+     * Log level messages from USB.
+     */
+    enum class LOG_LEVEL_USB {
+        LOG_NONE    = LIBUSB_LOG_LEVEL_NONE,
+        LOG_ERROR   = LIBUSB_LOG_LEVEL_ERROR,
+        LOG_WARNING = LIBUSB_LOG_LEVEL_WARNING,
+        LOG_INFO    = LIBUSB_LOG_LEVEL_INFO,
+        LOG_DEBUG   = LIBUSB_LOG_LEVEL_DEBUG
+    };
 };
 
 } // namespace
