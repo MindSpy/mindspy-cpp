@@ -2,8 +2,21 @@
 
 namespace  MindSpy {
 
-MatchingStream::MatchingStream()
+MatchingStream::MatchingStream(std::istream &in, std::ostream &out)
 {
-}
 
 }
+
+void MatchingStream::MatchingStreamRead()
+{
+
+}
+
+void MatchingStream::MatchingStreamWrite()
+{
+
+
+}
+
+
+} // namespace

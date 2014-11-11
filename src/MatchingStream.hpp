@@ -1,11 +1,20 @@
 #ifndef MATCHINGSTREAM_HPP
 #define MATCHINGSTREAM_HPP
 
-namespace MindSpy {
+#include <iostream>
+#include "Proto.hpp"
 
-class MatchingStream {
+using namespace google::protobuf::io;
+
+namespace MindSpy
+{
+
+class MatchingStream
+{
 public:
-    MatchingStream();
+
+    MatchingStream(std::istream &in, std::ostream &out);
+
 };
 
 } // namespace
