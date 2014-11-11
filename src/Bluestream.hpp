@@ -5,7 +5,7 @@ namespace MindSpy
 {
 
 /*
- * This class implement read and write from bluetooth.
+ * This class implement reading and writing from bluetooth.
  */
 class BlueStream
 {

@@ -7,11 +7,16 @@ namespace MindSpy
 {
 
 /*
- * This class implement read and write from usb.
+ * This class implement reading stream
+ * from USB and writing stream to USB-
  */
 class UsbStream
 {
 public:
+
+    /*
+     * Constructor. The USB device initialization.
+     */
     UsbStream();
 
 private:

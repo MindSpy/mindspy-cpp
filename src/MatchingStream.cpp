@@ -7,16 +7,19 @@ MatchingStream::MatchingStream(std::istream &in, std::ostream &out)
 
 }
 
-void MatchingStream::MatchingStreamRead()
+MatchingStream::~MatchingStream()
 {
 
 }
 
-void MatchingStream::MatchingStreamWrite()
+void MatchingStream::MatchingStreamRead(const MessageLite* message, ZeroCopyOutputStream* out);
 {
-
 
 }
 
+void MatchingStream::MatchingStreamWrite(ZeroCopyInputStream* in, MessageLite* message);
+{
+
+}
 
 } // namespace
