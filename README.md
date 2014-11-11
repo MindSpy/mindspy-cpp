@@ -1,2 +1,2 @@
 # MindSpy c++ library
-# Install library Protoc
+Install  apt-get install protobuf-compiler
