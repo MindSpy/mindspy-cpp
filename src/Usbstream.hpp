@@ -1,7 +1,15 @@
 #ifndef USBSTREAM_HPP
 #define USBSTREAM_HPP
 
+// Defined for linux platform
+#ifdef __linux__
 #include <libusb-1.0/libusb.h>
+
+// Defined for windows platform
+#ifdef _WIN32
+
+#endif
+
 
 namespace MindSpy
 {
