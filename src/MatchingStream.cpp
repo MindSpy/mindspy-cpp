@@ -1,8 +1,9 @@
 #include "MatchingStream.hpp"
 
-namespace  MindSpy {
+namespace  mindspy
+{
 
-MatchingStream::MatchingStream(std::istream &in, std::ostream &out)
+MatchingStream::MatchingStream(CodedStream &s) : stream(s)
 {
 
 }
@@ -12,12 +13,12 @@ MatchingStream::~MatchingStream()
 
 }
 
-void MatchingStream::MatchingStreamRead(const MessageLite* message, ZeroCopyOutputStream* out);
+bool MatchingStream::get(const MessageLite& message)
 {
 
 }
 
-void MatchingStream::MatchingStreamWrite(ZeroCopyInputStream* in, MessageLite* message);
+bool MatchingStream::put(MessageLite& message)
 {
 
 }

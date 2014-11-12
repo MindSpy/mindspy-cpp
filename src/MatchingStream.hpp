@@ -6,25 +6,29 @@
 #include <ostream>
 
 #include "Proto.hpp"
+#include "CodedStream.hpp"
+
+namespace mindspy
+{
 
 using namespace google::protobuf;
 using namespace google::protobuf::io;
-
-namespace MindSpy
-{
 
 class MatchingStream
 {
 public:
 
-    MatchingStream(std::istream &in, std::ostream &out);
+    MatchingStream(CodedStream&);
     ~MatchingStream();
 
-    // Read stream
-    void MatchingStreamRead(const MessageLite* message, ZeroCopyOutputStream* out);
+    // put to output queue
+    bool get(const MessageLite&);
 
-    // Write stream
-    void MatchingStreamWrite(ZeroCopyInputStream* in, MessageLite* message);
+    // get from input queue
+    bool put(MessageLite&);
+
+private:
+    CodedStream* stream;
 };
 
 } // namespace
