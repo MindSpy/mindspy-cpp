@@ -5,19 +5,18 @@
 namespace mindspy
 {
 
-using namespace google::protobuf;
-using namespace google::protobuf::io;
-
 CodedStream::CodedStream(int ifd, int ofd)
 {
     rawInput = new FileInputStream(ifd);
     rawOutput = new FileOutputStream(ofd);
+    startThreads();
 }
 
 CodedStream::CodedStream(istream &in, ostream &out)
 {
     rawInput = new IstreamInputStream(in);
     rawOutput = new OstreamOutputStream(out);
+    startThreads();
 }
 
 CodedStream::~CodedStream() {
@@ -25,18 +24,24 @@ CodedStream::~CodedStream() {
     delete rawOutput;
 }
 
-CodedStream::get(MessageLite &)
+
+void CodedStream::startThreads()
+{
+
+}
+
+bool CodedStream::get(MessageLite &)
 {
     // TODO put object to output synchronized queue
 }
 
-CodedStream::put(const MessageLite &)
+bool CodedStream::put(const MessageLite &)
 {
     // TODO get from input synchronized queue
 }
 
 // call in input thread
-CodedStream::readDelimitedFrom(MessageLite& message) {
+bool CodedStream::readDelimitedFrom(MessageLite& message) {
     // We create a new coded stream for each message.  Don't worry, this is fast,
     // and it makes sure the 64MB total size limit is imposed per-message rather
     // than on the whole stream.  (See the CodedInputStream interface for more
@@ -64,7 +69,7 @@ CodedStream::readDelimitedFrom(MessageLite& message) {
 }
 
 // call in output thread
-CodedStream::writeDelimitedTo(const MessageLite& message) {
+bool CodedStream::writeDelimitedTo(const MessageLite& message) {
     // We create a new coded stream for each message.  Don't worry, this is fast.
     CodedOutputStream output(rawOutput);
 

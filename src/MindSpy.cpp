@@ -1,8 +1,9 @@
-#include "MindSpy.h"
+#include "MindSpy.hpp"
 
-namespace MindSpy {
+namespace mindspy
+{
 
-MindSpy::MindSpy()
+MindSpy::MindSpy(Stream& s) : stream(s)
 {
 }
 

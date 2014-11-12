@@ -1,11 +1,17 @@
 #ifndef MINDSPY_H
 #define MINDSPY_H
 
-namespace MindSpy {
+#include "Stream.hpp"
+
+namespace mindspy
+{
 
 class MindSpy {
 public:
-    MindSpy();
+    MindSpy(Stream&);
+
+private:
+    Stream* stream;
 };
 
 } // namespace

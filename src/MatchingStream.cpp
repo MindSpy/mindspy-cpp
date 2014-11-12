@@ -5,20 +5,18 @@ namespace  mindspy
 
 MatchingStream::MatchingStream(CodedStream &s) : stream(s)
 {
-
 }
 
 MatchingStream::~MatchingStream()
 {
-
 }
 
-bool MatchingStream::get(const MessageLite& message)
+bool MatchingStream::get(MessageLite& message)
 {
 
 }
 
-bool MatchingStream::put(MessageLite& message)
+bool MatchingStream::put(const MessageLite& message)
 {
 
 }
