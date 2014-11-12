@@ -6,7 +6,6 @@
 #include <ostream>
 
 #include "Stream.hpp"
-#include "CodedStream.hpp"
 
 #include <google/protobuf/message.h>
 
@@ -19,7 +18,7 @@ class MatchingStream : public Stream
 {
 public:
 
-    MatchingStream(CodedStream&);
+    MatchingStream(Stream&);
     ~MatchingStream();
 
     // put to output queue
