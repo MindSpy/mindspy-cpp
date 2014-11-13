@@ -1,15 +1,16 @@
 #ifndef USBSTREAM_HPP
 #define USBSTREAM_HPP
 
+#include <iostream>
+
 // Defined for linux platform
 #ifdef __linux__
 #include <libusb-1.0/libusb.h>
 
 // Defined for windows platform
 #ifdef _WIN32
-
+#include <libusb.h>
 #endif
-
 
 namespace MindSpy
 {
@@ -29,6 +30,11 @@ public:
 
     ~UsbStream();
 
+    /*
+     * Print information from device.
+     */
+    void PrintDevice();
+
 private:
 
     /*
@@ -45,7 +51,12 @@ private:
     /*
      * Create usb context.
      */
-    libusb_context *deviceContext;
+    libusb_context *context;
+
+    /*
+     * Create device descriptor.
+     */
+    libusb_device_descriptor descriptor;
 
     /*
      * Number of find devices.
