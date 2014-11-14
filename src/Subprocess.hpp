@@ -16,25 +16,33 @@
 #define CHILD_READ_FD   ( pipes[PARENT_WRITE_PIPE][READ_FD]  )
 #define CHILD_WRITE_FD  ( pipes[PARENT_READ_PIPE][WRITE_FD]  )
 
-namespace mindspy {
-namespace test {
+namespace mindspy
+{
+namespace util
+{
 
 class Subprocess
 {
 public:
+
     Subprocess(const char* fn, char*const* args);
     Subprocess(const char* fn);
+
     ~Subprocess();
+
     int ifd();
     int ofd();
     void sync();
     pid_t pid();
+
 private:
-    int fds[2];
-    pid_t _pid;
 
     pid_t pcreate(const char* fn, char*const*);
     void setStreams();
+
+    int fds[2];
+    pid_t _pid;
+
 };
 
 }
