@@ -1,4 +1,5 @@
-#ifndef STREAM_HPP define STREAM_HPP
+#ifndef STREAM_HPP 
+#define STREAM_HPP
 
 #include <google/protobuf/message.h>
 

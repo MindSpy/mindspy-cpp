@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <signal.h>
 #include <fcntl.h>
-
+#include <unistd.h>
 
 namespace mindspy {
 namespace util {
