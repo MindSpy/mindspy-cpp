@@ -11,6 +11,7 @@ namespace test {
 
 using namespace google::protobuf;
 using namespace protobufs;
+using namespace util;
 
 int main() {
     Subprocess sub("../firmware/test/server");
@@ -27,6 +28,8 @@ int main() {
     ms.get(resp);
 
     // TODO ..
+
+    return 0;
 }
 
 }
