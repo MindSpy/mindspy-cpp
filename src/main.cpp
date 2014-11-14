@@ -5,6 +5,7 @@
 #include "Subprocess.hpp"
 #include "MatchingStream.hpp"
 #include "Proto.hpp"
+#include "Queue.hpp"
 
 using namespace google::protobuf;
 using namespace mindspy::protobufs;
@@ -25,6 +26,7 @@ int main(int argc, char * argv[]) {
 
     ms.get(resp);
 
+    mindspy::util::Queue<int> i;
     // TODO ..
 
     return 0;

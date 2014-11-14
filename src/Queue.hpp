@@ -20,7 +20,7 @@ public:
     // Defined default constructor.
     Queue() = default;
     // Disable copy constructor.
-    Queue(const &Queue) = delete;
+    Queue(const Queue&) = delete;
     // Disable assignment constructor.
     Queue& operator=(const Queue&) = delete;
 
