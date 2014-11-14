@@ -6,7 +6,7 @@
 
 
 namespace mindspy {
-namespace test {
+namespace util {
 
 Subprocess::Subprocess(const char* fn, char*const* args) {
     _pid = pcreate(fn, args);
@@ -51,7 +51,8 @@ pid_t Subprocess::pcreate(const char* fn, char*const* args) {
      * and fds[1] will write to it.
      * Similarly, the child process will receive a reading/writing fd set (in
      * that same order) as arguments.
-    */
+     */
+
     pid_t pid;
     int pipes[2][2];
 

@@ -1,5 +1,5 @@
 #ifndef CODEDSTREAM_HPP
-#define CODEDSTREAM_HPP
+#define CODEDSTREAM_HPPred
 
 #include "Stream.hpp"
 
@@ -13,11 +13,13 @@ namespace mindspy
 using namespace google::protobuf;
 using namespace google::protobuf::io;
 
-// class for nonblocking read and write
+/*
+ * Class for nonblocking read and write
+ */
 class CodedStream : public Stream
 {
 public:
-    // streams
+    // Stream
     CodedStream(std::istream &in, std::ostream &out);
     // FD's
     CodedStream(int ifd, int ofd);
@@ -27,7 +29,6 @@ public:
     bool get(MessageLite&);
     bool put(const MessageLite&);
 
-
 private:
     ZeroCopyInputStream* rawInput;
     ZeroCopyOutputStream* rawOutput;
@@ -35,11 +36,10 @@ private:
     bool readDelimitedFrom(MessageLite&);
     bool writeDelimitedTo(const MessageLite&);
 
-
     // TODO threads
     void startThreads();
 };
 
-}
+} // namespace
 
 #endif // CODEDSTREAM_HPP
