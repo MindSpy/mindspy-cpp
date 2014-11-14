@@ -6,14 +6,12 @@
 #include "MatchingStream.hpp"
 #include "Proto.hpp"
 
-namespace mindspy {
-namespace test {
-
 using namespace google::protobuf;
-using namespace protobufs;
-using namespace util;
+using namespace mindspy::protobufs;
+using namespace mindspy::util;
+using namespace mindspy;
 
-int main() {
+int main(int argc, char * argv[]) {
     Subprocess sub("../firmware/test/server");
     CodedStream cs(sub.ifd(), sub.ofd());
     MatchingStream ms(cs);
@@ -30,7 +28,4 @@ int main() {
     // TODO ..
 
     return 0;
-}
-
-}
 }
