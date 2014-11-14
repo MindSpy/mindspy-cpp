@@ -3,7 +3,7 @@
 namespace  mindspy
 {
 
-MatchingStream::MatchingStream(Stream &s) : stream(s)
+MatchingStream::MatchingStream(Stream& stream)
 {
 }
 

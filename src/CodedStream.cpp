@@ -1,21 +1,19 @@
 #include "CodedStream.hpp"
 
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-
 namespace mindspy
 {
+
+CodedStream::CodedStream(std::istream *in, std::ostream *out)
+{
+    rawInput = new IstreamInputStream(in);
+    rawOutput = new OstreamOutputStream(out);
+    startThreads();
+}
 
 CodedStream::CodedStream(int ifd, int ofd)
 {
     rawInput = new FileInputStream(ifd);
     rawOutput = new FileOutputStream(ofd);
-    startThreads();
-}
-
-CodedStream::CodedStream(istream &in, ostream &out)
-{
-    rawInput = new IstreamInputStream(in);
-    rawOutput = new OstreamOutputStream(out);
     startThreads();
 }
 

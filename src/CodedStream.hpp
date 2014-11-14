@@ -1,8 +1,11 @@
 #ifndef CODEDSTREAM_HPP
-#define CODEDSTREAM_HPPred
+#define CODEDSTREAM_HPP
+
+#include <istream>
 
 #include "Stream.hpp"
 
+#include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream.h>
 #include <google/protobuf/message.h>
@@ -14,13 +17,15 @@ using namespace google::protobuf;
 using namespace google::protobuf::io;
 
 /*
- * Class for nonblocking read and write
+ * Class for nonblocking read and write.
  */
 class CodedStream : public Stream
 {
 public:
+
     // Stream
-    CodedStream(std::istream &in, std::ostream &out);
+    CodedStream(std::istream *in, std::ostream *out);
+
     // FD's
     CodedStream(int ifd, int ofd);
 
@@ -30,6 +35,7 @@ public:
     bool put(const MessageLite&);
 
 private:
+
     ZeroCopyInputStream* rawInput;
     ZeroCopyOutputStream* rawOutput;
 
