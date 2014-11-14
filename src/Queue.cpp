@@ -9,16 +9,23 @@ Queue::Queue()
 
 }
 
-Queue::pop()
+void Queue::pop()
 {
 
 
 }
 
-Queue::push()
+void Queue::push()
 {
 
 }
+
+bool Queue::empty() const
+{
+
+}
+
+
 
 } // namespace
 
