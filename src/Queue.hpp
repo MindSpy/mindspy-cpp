@@ -33,7 +33,7 @@ public:
 
         while(queue.empty())
         {
-            condicion.wait(lock);
+            condition.wait(lock);
         }
 
         auto element = queue.front();
@@ -52,7 +52,7 @@ public:
 
         while(queue.empty())
         {
-            condicion.wait(lock);
+            condition.wait(lock);
         }
 
         element = queue.front();
@@ -71,7 +71,7 @@ public:
 
         lock.unlock();
 
-        condicion.notify_one();
+        condition.notify_one();
     }
 
     //void push(T&& element)
@@ -89,7 +89,7 @@ private:
 
     std::queue<T> queue;
     std::mutex queueMutex;
-    std::condition_variable condicion;
+    std::condition_variable condition;
 };
 
 } // namespace
