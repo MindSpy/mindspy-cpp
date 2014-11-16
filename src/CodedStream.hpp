@@ -9,12 +9,12 @@
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream.h>
 #include <google/protobuf/message.h>
+#include "Queue.hpp"
 
 namespace mindspy
 {
 
-using namespace google::protobuf;
-using namespace google::protobuf::io;
+using namespace util;
 
 /*
  * Class for nonblocking read and write.
@@ -31,19 +31,22 @@ public:
 
     ~CodedStream();
 
-    bool get(MessageLite&);
-    bool put(const MessageLite&);
+    bool get(google::protobuf::MessageLite&);
+    bool put(const google::protobuf::MessageLite&);
 
 private:
 
-    ZeroCopyInputStream* rawInput;
-    ZeroCopyOutputStream* rawOutput;
+    google::protobuf::io::ZeroCopyInputStream* rawInput;
+    google::protobuf::io::ZeroCopyOutputStream* rawOutput;
 
-    bool readDelimitedFrom(MessageLite&);
-    bool writeDelimitedTo(const MessageLite&);
+    bool readDelimitedFrom(google::protobuf::MessageLite&);
+    bool writeDelimitedTo(const google::protobuf::MessageLite&);
 
     // TODO threads
     void startThreads();
+
+    Queue<google::protobuf::MessageLite>* iqueue;
+    Queue<google::protobuf::MessageLite>* oqueue;
 };
 
 } // namespace
