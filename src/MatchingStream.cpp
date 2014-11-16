@@ -11,12 +11,12 @@ MatchingStream::~MatchingStream()
 {
 }
 
-bool MatchingStream::get(MessageLite& message)
+bool MatchingStream::get(google::protobuf::MessageLite& message)
 {
 
 }
 
-bool MatchingStream::put(const MessageLite& message)
+bool MatchingStream::put(const google::protobuf::MessageLite& message)
 {
 
 }

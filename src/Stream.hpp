@@ -5,12 +5,10 @@
 
 namespace mindspy
 {
-
+// Abstract class for stream.
 class Stream
 {
 public:
-
-    virtual ~Stream() {}
 
     /*
      * Put message to the stream.

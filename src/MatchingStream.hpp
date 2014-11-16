@@ -15,7 +15,7 @@ public:
 
     MatchingStream(Stream& stream);
 
-    ~MatchingStream();
+    virtual ~MatchingStream();
 
     // Put to output queue
     bool get(google::protobuf::MessageLite& message);

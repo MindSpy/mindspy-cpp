@@ -12,7 +12,7 @@ namespace util {
 /*!
  * The Queue class is simple thread safe concept.
  */
-template <class T>
+template <typename T>
 class Queue
 {
 public:
