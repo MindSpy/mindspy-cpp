@@ -1,4 +1,4 @@
-#include "Bluestream.hpp"
+#include "BlueStream.hpp"
 
 namespace MindSpy
 {

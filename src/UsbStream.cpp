@@ -1,4 +1,4 @@
-#include "Usbstream.hpp"
+#include "UsbStream.hpp"
 
 namespace MindSpy
 {
