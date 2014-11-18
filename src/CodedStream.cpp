@@ -3,52 +3,67 @@
 namespace mindspy
 {
 
-CodedStream::CodedStream(std::istream *in, std::ostream *out)
-{
-    rawStreamInput = new IstreamInputStream(in);
-    rawStreamOutput = new OstreamOutputStream(out);
-
-    // Initialize threads
-
-    inputQueue = new Queue<Message*>();
-    outputQueue = new Queue<Message*>();
-
-    startThreads();
+CodedStream::CodedStream(std::istream &in, std::ostream &out) :
+    rawStreamInput(new IstreamInputStream(&in)),
+    rawStreamOutput(new OstreamOutputStream(&out)),
+    inputThread(new std::thread(CodedStream::inputTask, this)),
+    outputThread(new std::thread(CodedStream::outputTask, this))
+{\
 }
 
-CodedStream::CodedStream(int ifd, int ofd)
-{
-    rawStreamInput = new FileInputStream(ifd);
-    rawStreamOutput = new FileOutputStream(ofd);
-
-    // Initialize threads
-    inputQueue = new Queue<Message*>();
-    outputQueue = new Queue<Message*>();
-
-    startThreads();
+CodedStream::CodedStream(int ifd, int ofd) :
+    rawStreamInput(new FileInputStream(ifd)),
+    rawStreamOutput(new FileOutputStream(ofd)),
+    inputThread(new std::thread(CodedStream::inputTask, this)),
+    outputThread(new std::thread(CodedStream::outputTask, this))
+{\
 }
 
-CodedStream::~CodedStream() {
+
+CodedStream::~CodedStream()
+{
+    delete inputThread;
+    delete outputThread;
     delete rawStreamInput;
     delete rawStreamOutput;
-    delete inputQueue;
-    delete outputQueue;
 }
 
-
-void CodedStream::startThreads()
+void CodedStream::inputTask (CodedStream *obj)
 {
+    for (;;)
+    {
+        Message *msg = obj->inputMessageAllocator();
+        if (obj->readDelimitedFrom(*msg))
+            ; // failed to read - missing handler
+        obj->inputQueue.put(msg);
+    }
+}
 
+void CodedStream::outputTask (CodedStream *obj)
+{
+    for (;;)
+    {
+        Message *msg = obj->outputQueue.get();
+        if (obj->writeDelimitedTo(*msg))
+            ; // failed to write - missing handler
+        delete msg;
+    }
 }
 
 bool CodedStream::get(Message &message)
 {
-    // TODO put object to output synchronized queue
+    Message *msg = inputQueue.get();
+    message.CopyFrom(*msg);
+    delete msg;
+    return true;
 }
 
 bool CodedStream::put(const Message &message)
 {
-    // TODO get from input synchronized queue
+    Message *msg = outputMessageAllocator();
+    msg->CopyFrom(message);
+    outputQueue.put(msg);
+    return true;
 }
 
 // call in input thread
@@ -68,7 +83,7 @@ bool CodedStream::readDelimitedFrom(Message &message) {
     CodedInputStream::Limit limit = input.PushLimit(size);
 
     // Parse the message.
-    if (!message.MergeFromCodedStream(&input))
+    if (!message.ParseFromCodedStream(&input))
         return false;
     if (!input.ConsumedEntireMessage())
         return false;
