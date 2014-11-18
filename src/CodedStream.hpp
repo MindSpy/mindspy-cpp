@@ -3,9 +3,10 @@
 
 #include <istream>
 #include <memory>
+#include <thread>
 
 #include "Stream.hpp"
-#include "Queue.hpp"
+#include "FifoQueue.hpp"
 
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/io/coded_stream.h>
@@ -15,35 +16,55 @@
 namespace mindspy
 {
 
+using namespace mindspy::util;
+using namespace google::protobuf;
+using namespace google::protobuf::io;
+
+
 /*
  * Class for nonblocking read and write.
  */
+//template<class InputMessage, class OutputMessage>
 class CodedStream : public Stream
 {
 public:
 
     // Stream
-    CodedStream(std::istream *in, std::ostream *out);
+    CodedStream(std::istream &in, std::ostream &out);
     CodedStream(int ifd, int ofd);
 
     virtual ~CodedStream();
 
-    bool get(google::protobuf::MessageLite& message);
-    bool put(const google::protobuf::MessageLite& message);
+    bool get(Message &);
+    bool put(const Message &);
 
 private:
 
-    google::protobuf::io::ZeroCopyInputStream *rawStreamInput;
-    google::protobuf::io::ZeroCopyOutputStream *rawStreamOutput;
+    ZeroCopyInputStream *rawStreamInput;
+    ZeroCopyOutputStream *rawStreamOutput;
 
-    util::Queue<google::protobuf::MessageLite*> *inputQueue;
-    util::Queue<google::protobuf::MessageLite*> *outputQueue;
+    FifoQueue<Message*> inputQueue;
+    FifoQueue<Message*> outputQueue;
 
-    bool readDelimitedFrom(google::protobuf::MessageLite& message);
-    bool writeDelimitedTo(const google::protobuf::MessageLite& message);
+    std::thread *inputThread;
+    std::thread *outputThread;
 
-    // TODO threads
-    void startThreads();
+    // thread tasks
+    static void inputTask(CodedStream *);
+    static void outputTask(CodedStream *);
+
+    bool readDelimitedFrom(Message &);
+    bool writeDelimitedTo(const Message &);
+
+    inline Message *inputMessageAllocator()
+    {
+        return NULL; // new InputMessage();
+    }
+
+    inline Message *outputMessageAllocator()
+    {
+        return NULL; //new OutputMessage();
+    }
 };
 
 } // namespace
