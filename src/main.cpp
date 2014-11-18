@@ -46,11 +46,13 @@ int main(int argc, char * argv[])
     req.set_timestamp(timestamp());
     req.set_reqid(reqid());
 
+    std::cout << "Request { " << req.ShortDebugString() << " }"  << std::endl;
+
     ms.put(req);
 
     ms.get(resp);
 
-    std::cout << "Response: " << resp.DebugString() << std::endl;
+    std::cout << "Response { " << resp.ShortDebugString() << " }" << std::endl;
 
     return 0;
 }
