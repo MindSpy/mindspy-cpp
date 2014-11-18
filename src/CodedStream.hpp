@@ -15,6 +15,11 @@
 namespace mindspy
 {
 
+using namespace mindspy::util;
+using namespace google::protobuf;
+using namespace google::protobuf::io;
+
+
 /*
  * Class for nonblocking read and write.
  */
@@ -28,19 +33,19 @@ public:
 
     virtual ~CodedStream();
 
-    bool get(google::protobuf::MessageLite& message);
-    bool put(const google::protobuf::MessageLite& message);
+    bool get(Message &);
+    bool put(const Message &);
 
 private:
 
-    google::protobuf::io::ZeroCopyInputStream *rawStreamInput;
-    google::protobuf::io::ZeroCopyOutputStream *rawStreamOutput;
+    ZeroCopyInputStream *rawStreamInput;
+    ZeroCopyOutputStream *rawStreamOutput;
 
-    util::Queue<google::protobuf::MessageLite*> *inputQueue;
-    util::Queue<google::protobuf::MessageLite*> *outputQueue;
+    Queue<Message*> *inputQueue;
+    Queue<Message*> *outputQueue;
 
-    bool readDelimitedFrom(google::protobuf::MessageLite& message);
-    bool writeDelimitedTo(const google::protobuf::MessageLite& message);
+    bool readDelimitedFrom(Message &);
+    bool writeDelimitedTo(const Message &);
 
     // TODO threads
     void startThreads();

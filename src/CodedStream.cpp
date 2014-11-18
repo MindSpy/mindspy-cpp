@@ -5,25 +5,25 @@ namespace mindspy
 
 CodedStream::CodedStream(std::istream *in, std::ostream *out)
 {
-    rawStreamInput = new google::protobuf::io::IstreamInputStream(in);
-    rawStreamOutput = new google::protobuf::io::OstreamOutputStream(out);
+    rawStreamInput = new IstreamInputStream(in);
+    rawStreamOutput = new OstreamOutputStream(out);
 
     // Initialize threads
 
-    inputQueue = new util::Queue<google::protobuf::MessageLite*>();
-    outputQueue = new util::Queue<google::protobuf::MessageLite*>();
+    inputQueue = new Queue<Message*>();
+    outputQueue = new Queue<Message*>();
 
     startThreads();
 }
 
 CodedStream::CodedStream(int ifd, int ofd)
 {
-    rawStreamInput = new google::protobuf::io::FileInputStream(ifd);
-    rawStreamOutput = new google::protobuf::io::FileOutputStream(ofd);
+    rawStreamInput = new FileInputStream(ifd);
+    rawStreamOutput = new FileOutputStream(ofd);
 
     // Initialize threads
-    inputQueue = new util::Queue<google::protobuf::MessageLite*>();
-    outputQueue = new util::Queue<google::protobuf::MessageLite*>();
+    inputQueue = new Queue<Message*>();
+    outputQueue = new Queue<Message*>();
 
     startThreads();
 }
@@ -41,23 +41,23 @@ void CodedStream::startThreads()
 
 }
 
-bool CodedStream::get(google::protobuf::MessageLite &message)
+bool CodedStream::get(Message &message)
 {
     // TODO put object to output synchronized queue
 }
 
-bool CodedStream::put(const google::protobuf::MessageLite &message)
+bool CodedStream::put(const Message &message)
 {
     // TODO get from input synchronized queue
 }
 
 // call in input thread
-bool CodedStream::readDelimitedFrom(google::protobuf::MessageLite& message) {
+bool CodedStream::readDelimitedFrom(Message &message) {
     // We create a new coded stream for each message.  Don't worry, this is fast,
     // and it makes sure the 64MB total size limit is imposed per-message rather
     // than on the whole stream.  (See the CodedInputStream interface for more
     // info on this limit.)
-    google::protobuf::io::CodedInputStream input(rawStreamInput);
+    CodedInputStream input(rawStreamInput);
 
     // Read the size.
     uint32_t size;
@@ -65,7 +65,7 @@ bool CodedStream::readDelimitedFrom(google::protobuf::MessageLite& message) {
         return false;
 
     // Tell the stream not to read beyond that size.
-    google::protobuf::io::CodedInputStream::Limit limit = input.PushLimit(size);
+    CodedInputStream::Limit limit = input.PushLimit(size);
 
     // Parse the message.
     if (!message.MergeFromCodedStream(&input))
@@ -80,9 +80,9 @@ bool CodedStream::readDelimitedFrom(google::protobuf::MessageLite& message) {
 }
 
 // call in output thread
-bool CodedStream::writeDelimitedTo(const google::protobuf::MessageLite& message) {
+bool CodedStream::writeDelimitedTo(const Message &message) {
     // We create a new coded stream for each message.  Don't worry, this is fast.
-    google::protobuf::io::CodedOutputStream output(rawStreamOutput);
+    CodedOutputStream output(rawStreamOutput);
 
     // Write the size.
     const uint32_t size = message.ByteSize();
