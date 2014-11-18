@@ -18,10 +18,10 @@ public:
     virtual ~MatchingStream();
 
     // Put to output queue
-    bool get(google::protobuf::MessageLite& message);
+    bool get(Message& message);
 
     // Get from input queue
-    bool put(const google::protobuf::MessageLite& message);
+    bool put(const Message& message);
 
 private:
 
