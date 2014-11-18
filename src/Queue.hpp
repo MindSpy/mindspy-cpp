@@ -1,7 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <queue>
 #include <mutex>
 #include <condition_variable>
 
@@ -12,11 +11,10 @@ namespace util {
 /*!
  * The Queue class is simple thread safe concept.
  */
-template <typename T>
+template <class T>
 class Queue
 {
 public:
-
     // Defined default constructor.
     Queue() = default;
     // Disable copy constructor.
@@ -24,72 +22,57 @@ public:
     // Disable assignment constructor.
     Queue& operator=(const Queue&) = delete;
 
+    virtual ~Queue() { }
+
     /*!
-     * Remove element from queue.
+     * \brief Remove element from queue.
+     * \return element that has been removed
      */
-    T pop()
+    T get()
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-
-        while(queue.empty())
-        {
+        // acquire lock
+        std::unique_lock<std::mutex> lock(mutex);
+        // wait for next element
+        while(empty_nolock())
             condition.wait(lock);
-        }
-
-        auto element = queue.front();
-
-        queue.pop();
-
-        return element;
+        // pop front element
+        return pop_nolock();
     }
 
     /*!
-     * Remove element from queue.
+     * \brief Remove element from queue.
+     * \param element that has been removed
      */
-    void pop(T& element)
+    void get(T& element)
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-
-        while(queue.empty())
-        {
-            condition.wait(lock);
-        }
-
-        element = queue.front();
-
-        queue.pop();
+        element = get();
     }
 
     /*!
-     * Add element to queue.
+     * \brief Add element to queue.
+     * \param element to be added
      */
-    void push(T& element)
+    void put(T element)
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-
-        queue.push(element);
-
+        // acquire lock
+        std::unique_lock<std::mutex> lock(mutex);
+        // add element
+        push_nolock(element);
+        // unlock
         lock.unlock();
-
+        // notify waiting threads
         condition.notify_one();
     }
 
-    //void push(T&& element)
-    //{
-    //    std::unique_lock<std::mutex> lock(queueMutex);
-    //
-    //    queue.push(std::move(element));
-    //
-    //    lock.unlock();
-    //
-    //     condicion.notify_one();
-    //}
+protected:
+    virtual void push_nolock(T &element) = 0;
+    virtual T pop_nolock() = 0;
+    virtual bool empty_nolock() = 0;
 
 private:
-
-    std::queue<T> queue;
-    std::mutex queueMutex;
+    std::mutex mutex;
     std::condition_variable condition;
+
 };
 
 } // namespace
