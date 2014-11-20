@@ -30,7 +30,7 @@ $(OUTDIR)/%.cpp.o: src/%.cpp
 
 main: $(OUTDIR)/main.cpp.o $(OUTDIR)/Subprocess.cpp.o $(OUTDIR)/CodedStream.cpp.o $(OUTDIR)/MatchingStream.cpp.o $(OUTDIR)/Proto.cpp.o
 	@echo "Linking" `basename $@` "<" $?
-	$M$(CXX) $? -o $(OUTDIR)/$@ -lstdc++ -lgcc -lprotobuf -lusb 
+	$M$(CXX) $? -o $(OUTDIR)/$@ -lstdc++ -lgcc -lprotobuf -lusb -pthread
 
 
 

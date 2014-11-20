@@ -8,7 +8,7 @@ CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamOutput(new OstreamOutputStream(&out)),
     inputThread(new std::thread(CodedStream::inputTask, this)),
     outputThread(new std::thread(CodedStream::outputTask, this))
-{\
+{
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
@@ -16,7 +16,7 @@ CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamOutput(new FileOutputStream(ofd)),
     inputThread(new std::thread(CodedStream::inputTask, this)),
     outputThread(new std::thread(CodedStream::outputTask, this))
-{\
+{
 }
 
 
