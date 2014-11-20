@@ -64,10 +64,26 @@ public:
         condition.notify_one();
     }
 
+    bool empty()
+    {
+        // acquire lock
+        std::unique_lock<std::mutex> lock(mutex);
+        return empty_nolock();
+
+    }
+
+    bool full()
+    {
+        // acquire lock
+        std::unique_lock<std::mutex> lock(mutex);
+        return full_nolock();
+    }
+
 protected:
     virtual void push_nolock(T &element) = 0;
     virtual T pop_nolock() = 0;
     virtual bool empty_nolock() = 0;
+    virtual bool full_nolock() = 0;
 
 private:
     std::mutex mutex;

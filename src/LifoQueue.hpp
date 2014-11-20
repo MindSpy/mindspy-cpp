@@ -11,12 +11,12 @@ namespace util {
 /*!
  * The Queue class is simple thread safe concept.
  */
-template <class T, class Container = std::deque<T>>
-class FifoQueue : public Queue<T>
+template <class T>
+class LifoQueue : public Queue<T>
 {
 
 protected:
-    Container container;
+    std::deque<T> container;
 
     void push_nolock(T &element)
     {
@@ -33,6 +33,11 @@ protected:
     bool empty_nolock()
     {
         return container.empty();
+    }
+
+    bool full_nolock()
+    {
+        return container.size() <= container.max_size();
     }
 };
 
