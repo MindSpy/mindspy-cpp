@@ -22,21 +22,25 @@ CodedStream::CodedStream(int ifd, int ofd) :
 
 CodedStream::~CodedStream()
 {
-    delete inputThread;
-    delete outputThread;
-    delete rawStreamInput;
-    delete rawStreamOutput;
+   inputThread->detach();
+   delete inputThread;
+
+   outputThread->detach();
+   delete outputThread;
+
+   delete rawStreamInput;
+   delete rawStreamOutput;
 }
 
 void CodedStream::inputTask (CodedStream *obj)
 {
-    for (;;)
+    /*for (;;)
     {
         Message *msg = obj->inputMessageAllocator();
         if (obj->readDelimitedFrom(*msg))
             ; // failed to read - missing handler
         obj->inputQueue.put(msg);
-    }
+    }*/
 }
 
 void CodedStream::outputTask (CodedStream *obj)
@@ -46,7 +50,7 @@ void CodedStream::outputTask (CodedStream *obj)
         Message *msg = obj->outputQueue.get();
         if (obj->writeDelimitedTo(*msg))
             ; // failed to write - missing handler
-        delete msg;
+        //delete msg;
     }
 }
 
@@ -54,15 +58,15 @@ bool CodedStream::get(Message &message)
 {
     Message *msg = inputQueue.get();
     message.CopyFrom(*msg);
-    delete msg;
+    //delete msg;
     return true;
 }
 
 bool CodedStream::put(const Message &message)
 {
-    Message *msg = outputMessageAllocator();
+    /*Message *msg = outputMessageAllocator();
     msg->CopyFrom(message);
-    outputQueue.put(msg);
+    outputQueue.put(msg);*/
     return true;
 }
 

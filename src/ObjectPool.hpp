@@ -1,32 +1,41 @@
 #ifndef OBJECTPOOL_H
 #define OBJECTPOOL_H
 
-#include "LifoQueue.hpp"
-
 namespace mindspy {
 
 namespace util {
 
+/*!
+ * The class is simple object pool.
+ * This class allocate and deallocate object.
+ */
 template<typename T, class Allocator>
-class ObjectPool : public Queue
+class ObjectPool
 {
 
 protected:
+
    std::deque<T> container;
 
    void push_nolock(T &element)
    {
        if (container.full())
-           Allocator::deallocate(element);
+       {
+            Allocator::deallocate(element);
+       }
        else
+       {
            container.push_front(element);
+       }
    }
 
    T pop_nolock()
    {
         T element;
         if (container.empty())
+        {
             element = Allocator::allocate();
+        }
         else
         {
             element = container.front();
@@ -41,7 +50,7 @@ protected:
    }
 
 
-   bool empty_nolock()
+   bool max_size()
    {
     return container.size() <= container.max_size();
    }
