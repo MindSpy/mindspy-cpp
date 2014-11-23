@@ -5,34 +5,29 @@ namespace mindspy
 
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamInput(new IstreamInputStream(&in)),
-    rawStreamOutput(new OstreamOutputStream(&out)),
-    inputThread(new std::thread(CodedStream::inputTask, this)),
-    outputThread(new std::thread(CodedStream::outputTask, this))
+    rawStreamOutput(new OstreamOutputStream(&out))
+    //inputThread((inputTask())), outputThread((outputTask()))
 {
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamInput(new FileInputStream(ifd)),
-    rawStreamOutput(new FileOutputStream(ofd)),
-    inputThread(new std::thread(CodedStream::inputTask, this)),
-    outputThread(new std::thread(CodedStream::outputTask, this))
+    rawStreamOutput(new FileOutputStream(ofd))
+    //inputThread(inputTask()), outputThread(outputTask())
 {
 }
 
 
 CodedStream::~CodedStream()
 {
-   inputThread->detach();
-   delete inputThread;
-
-   outputThread->detach();
-   delete outputThread;
+   //inputThread->detach();
+   //outputThread->detach();
 
    delete rawStreamInput;
    delete rawStreamOutput;
 }
 
-void CodedStream::inputTask (CodedStream *obj)
+void CodedStream::inputTask ()
 {
     /*for (;;)
     {
@@ -43,22 +38,20 @@ void CodedStream::inputTask (CodedStream *obj)
     }*/
 }
 
-void CodedStream::outputTask (CodedStream *obj)
+void CodedStream::outputTask ()
 {
-    for (;;)
+    /*for (;;)
     {
         Message *msg = obj->outputQueue.get();
         if (obj->writeDelimitedTo(*msg))
             ; // failed to write - missing handler
-        //delete msg;
-    }
+    }*/
 }
 
 bool CodedStream::get(Message &message)
 {
     Message *msg = inputQueue.get();
     message.CopyFrom(*msg);
-    //delete msg;
     return true;
 }
 

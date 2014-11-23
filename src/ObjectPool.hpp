@@ -1,6 +1,11 @@
 #ifndef OBJECTPOOL_H
 #define OBJECTPOOL_H
 
+#include <cstddef>
+#include <queue>
+#include <memory>
+#include <exception>
+
 namespace mindspy {
 
 namespace util {
@@ -9,56 +14,60 @@ namespace util {
  * The class is simple object pool.
  * This class allocate and deallocate object.
  */
-template<typename T, class Allocator>
+template<typename T>
 class ObjectPool
 {
+public:
 
-protected:
+    /*!
+     * \brief Constructor. Create object pool with size object.
+     * \param size object pool.
+     */
+    ObjectPool(std::size_t size = defaultsize);
+    // Disable copy and assignment constructor.
+    ObjectPool(const ObjectPool<T>& source) = delete;
+    ObjectPool<T>& operator = (const ObjectPool<T>& source) = delete;
 
-   std::deque<T> container;
+    /*!
+     * The type of smart pointer.
+     */
+    using object = std::shared_ptr<T>;
 
-   void push_nolock(T &element)
-   {
-       if (container.full())
-       {
-            Allocator::deallocate(element);
-       }
-       else
-       {
-           container.push_front(element);
-       }
-   }
+    /*!
+     * \brief Reserve object.
+     */
+    object acquireobject();
 
-   T pop_nolock()
-   {
-        T element;
-        if (container.empty())
-        {
-            element = Allocator::allocate();
-        }
-        else
-        {
-            element = container.front();
-            container.pop_front();
-        }
-        return element;
-   }
+private:
 
-   bool empty_nolock()
-   {
-       return container.empty();
-   }
+    /*!
+     * \brief stores the objects.
+     */
+    std::queue<std::unique_ptr<T>> pool;
 
+    /*!
+     * \brief Default size object pool.
+     */
+    static const std::size_t defaultsize = 10;
 
-   bool max_size()
-   {
-    return container.size() <= container.max_size();
-   }
+    /*!
+     * \brief Local size object;
+     */
+    std::size_t size;
 
+    /*!
+     * \brief Allocate size new object and adds pool.
+     */
+    void allocate();
+
+    /*!
+     * \brief Return size object pool;
+     */
+    std::size_t sizepool() { return pool.size(); }
 };
 
-}
+} // namespace
 
-}
+} // namespace
 
 #endif // OBJECTPOOL_H

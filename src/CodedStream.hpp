@@ -60,14 +60,13 @@ private:
     std::thread *outputThread;
 
     // thread tasks
-    static void inputTask(CodedStream *);
-    static void outputTask(CodedStream *);
+    void inputTask();
+    void outputTask();
 
     bool readDelimitedFrom(Message &);
     bool writeDelimitedTo(const Message &);
 
-
-
+    //mindspy::util::ObjectPool<Message*> obj;
 };
 
 } // namespace
