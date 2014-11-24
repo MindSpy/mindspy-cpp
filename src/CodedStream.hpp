@@ -2,8 +2,10 @@
 #define CODEDSTREAM_HPP
 
 #include <istream>
+#include <iostream>
 #include <memory>
 #include <thread>
+#include <mutex>
 
 #include "Stream.hpp"
 #include "FifoQueue.hpp"
@@ -59,14 +61,15 @@ private:
     std::thread *inputThread;
     std::thread *outputThread;
 
-    // thread tasks
+    // response
     void inputTask();
+    // reqest
     void outputTask();
 
     bool readDelimitedFrom(Message &);
     bool writeDelimitedTo(const Message &);
 
-    //mindspy::util::ObjectPool<Message*> obj;
+    //ObjectPool<Message> obj(10); // error
 };
 
 } // namespace

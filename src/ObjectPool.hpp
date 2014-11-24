@@ -29,21 +29,23 @@ public:
     ObjectPool<T>& operator = (const ObjectPool<T>& source) = delete;
 
     /*!
-     * The type of smart pointer.
+     * Reserves an object for use. Clients must not free the object!
      */
-    using object = std::shared_ptr<T>;
+    std::shared_ptr<T> acquireObject();
 
     /*!
-     * \brief Reserve object.
+     * Returns the object to the pool. Clients must not use the object after
+     * it has been returned to the pool.
      */
-    object acquireobject();
+    void releaseObject(std::shared_ptr<T> obj);
 
-private:
+
+protected:
 
     /*!
      * \brief stores the objects.
      */
-    std::queue<std::unique_ptr<T>> pool;
+    std::queue<std::shared_ptr<T>> pool;
 
     /*!
      * \brief Default size object pool.

@@ -31,6 +31,7 @@ CodedStream::~CodedStream()
 
 void CodedStream::inputTask ()
 {
+    std::cout << "Hello input thread" << std::endl;
     for (;;)
     {
         Message *msg = ipool.get();
@@ -42,6 +43,7 @@ void CodedStream::inputTask ()
 
 void CodedStream::outputTask ()
 {
+    std::cout << "Hello input thread" << std::endl;
     for (;;)
     {
         Message *msg = this->outputQueue.get();
