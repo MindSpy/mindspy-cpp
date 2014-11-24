@@ -37,7 +37,7 @@ int main(int argc, char * argv[])
 {
     Subprocess sub("../firmware/test/server");
     CodedStream cs(sub.ifd(), sub.ofd());
-    MatchingStream ms(cs);
+    MatchingStream ms(&cs);
 
     Request req;
     Response resp;
