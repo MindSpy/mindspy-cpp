@@ -13,7 +13,7 @@ class MatchingStream : public Stream
 {
 public:
 
-    MatchingStream(Stream& stream);
+    MatchingStream(Stream* stream);
 
     virtual ~MatchingStream();
 
@@ -25,7 +25,7 @@ public:
 
 private:
 
-    CodedStream* stream;
+    Stream* stream;
 };
 
 } // namespace

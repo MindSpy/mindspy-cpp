@@ -6,27 +6,28 @@ namespace mindspy
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamInput(new IstreamInputStream(&in)),
     rawStreamOutput(new OstreamOutputStream(&out)),
-    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this)), objpool(100)
-{
+    inputThread(new std::thread(&CodedStream::inputTask, this)),
+    outputThread(new std::thread(&CodedStream::outputTask, this)),
+    objpool(100)
 
-    inputThread->join();
-    outputThread->join();
+{
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamInput(new FileInputStream(ifd)),
     rawStreamOutput(new FileOutputStream(ofd)),
-    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this)), objpool(100)
+    inputThread(new std::thread(&CodedStream::inputTask, this)),
+    outputThread(new std::thread(&CodedStream::outputTask, this)),
+    objpool(100)
+
 {
-    inputThread->join();
-    outputThread->join();
 }
 
 
 CodedStream::~CodedStream()
 {
-   //inputThread->detach();
-   //outputThread->detach();
+   inputThread->detach();
+   outputThread->detach();
 
    delete rawStreamInput;
    delete rawStreamOutput;
@@ -35,38 +36,40 @@ CodedStream::~CodedStream()
 void CodedStream::inputTask ()
 {
     std::cout << "Hello input thread" << std::endl;
-    /*for (;;)
+    for (;;)
     {
-        Message *msg = obj->inputMessageAllocator();
-        if (obj->readDelimitedFrom(*msg))
+        Message *msg = ipool.get();
+        if (this->readDelimitedFrom(*msg))
             ; // failed to read - missing handler
-        obj->inputQueue.put(msg);
-    }*/
+        this->inputQueue.put(msg);
+    }
 }
 
 void CodedStream::outputTask ()
 {
     std::cout << "Hello input thread" << std::endl;
-    /*for (;;)
+    for (;;)
     {
-        Message *msg = obj->outputQueue.get();
-        if (obj->writeDelimitedTo(*msg))
+        Message *msg = this->outputQueue.get();
+        if (this->writeDelimitedTo(*msg))
             ; // failed to write - missing handler
-    }*/
+        opool.put(msg);
+    }
 }
 
 bool CodedStream::get(Message &message)
 {
     Message *msg = inputQueue.get();
     message.CopyFrom(*msg);
+    ipool.put(msg);
     return true;
 }
 
 bool CodedStream::put(const Message &message)
 {
-    /*Message *msg = outputMessageAllocator();
+    Message *msg = opool.get();
     msg->CopyFrom(message);
-    outputQueue.put(msg);*/
+    outputQueue.put(msg);
     return true;
 }
 
