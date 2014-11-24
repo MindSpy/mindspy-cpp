@@ -6,7 +6,7 @@ namespace mindspy
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamInput(new IstreamInputStream(&in)),
     rawStreamOutput(new OstreamOutputStream(&out)),
-    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this))
+    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this)), objpool(100)
 {
 
     inputThread->join();
@@ -16,7 +16,7 @@ CodedStream::CodedStream(std::istream &in, std::ostream &out) :
 CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamInput(new FileInputStream(ifd)),
     rawStreamOutput(new FileOutputStream(ofd)),
-    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this))
+    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this)), objpool(100)
 {
     inputThread->join();
     outputThread->join();

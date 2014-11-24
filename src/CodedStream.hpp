@@ -5,7 +5,6 @@
 #include <iostream>
 #include <memory>
 #include <thread>
-#include <mutex>
 
 #include "Stream.hpp"
 #include "FifoQueue.hpp"
@@ -69,7 +68,7 @@ private:
     bool readDelimitedFrom(Message &);
     bool writeDelimitedTo(const Message &);
 
-    //ObjectPool<Message> obj(10); // error
+    ObjectPool<int> objpool;
 };
 
 } // namespace
