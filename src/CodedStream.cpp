@@ -5,16 +5,21 @@ namespace mindspy
 
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamInput(new IstreamInputStream(&in)),
-    rawStreamOutput(new OstreamOutputStream(&out))
-    //inputThread((inputTask())), outputThread((outputTask()))
+    rawStreamOutput(new OstreamOutputStream(&out)),
+    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this))
 {
+
+    inputThread->join();
+    outputThread->join();
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamInput(new FileInputStream(ifd)),
-    rawStreamOutput(new FileOutputStream(ofd))
-    //inputThread(inputTask()), outputThread(outputTask())
+    rawStreamOutput(new FileOutputStream(ofd)),
+    inputThread(new std::thread(&CodedStream::inputTask, this)), outputThread(new std::thread(&CodedStream::outputTask, this))
 {
+    inputThread->join();
+    outputThread->join();
 }
 
 
@@ -29,6 +34,7 @@ CodedStream::~CodedStream()
 
 void CodedStream::inputTask ()
 {
+    std::cout << "Hello input thread" << std::endl;
     /*for (;;)
     {
         Message *msg = obj->inputMessageAllocator();
@@ -40,6 +46,7 @@ void CodedStream::inputTask ()
 
 void CodedStream::outputTask ()
 {
+    std::cout << "Hello input thread" << std::endl;
     /*for (;;)
     {
         Message *msg = obj->outputQueue.get();
