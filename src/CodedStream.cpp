@@ -5,23 +5,25 @@ namespace mindspy
 
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamInput(new IstreamInputStream(&in)),
-    rawStreamOutput(new OstreamOutputStream(&out))
-    //inputThread((inputTask())), outputThread((outputTask()))
+    rawStreamOutput(new OstreamOutputStream(&out)),
+    inputThread(new std::thread(&CodedStream::inputTask, this)),
+    outputThread(new std::thread(&CodedStream::outputTask, this))
 {
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamInput(new FileInputStream(ifd)),
-    rawStreamOutput(new FileOutputStream(ofd))
-    //inputThread(inputTask()), outputThread(outputTask())
+    rawStreamOutput(new FileOutputStream(ofd)),
+    inputThread(new std::thread(&CodedStream::inputTask, this)),
+    outputThread(new std::thread(&CodedStream::outputTask, this))
 {
 }
 
 
 CodedStream::~CodedStream()
 {
-   //inputThread->detach();
-   //outputThread->detach();
+   inputThread->detach();
+   outputThread->detach();
 
    delete rawStreamInput;
    delete rawStreamOutput;
@@ -29,37 +31,39 @@ CodedStream::~CodedStream()
 
 void CodedStream::inputTask ()
 {
-    /*for (;;)
+    for (;;)
     {
-        Message *msg = obj->inputMessageAllocator();
-        if (obj->readDelimitedFrom(*msg))
+        Message *msg = ipool.get();
+        if (this->readDelimitedFrom(*msg))
             ; // failed to read - missing handler
-        obj->inputQueue.put(msg);
-    }*/
+        this->inputQueue.put(msg);
+    }
 }
 
 void CodedStream::outputTask ()
 {
-    /*for (;;)
+    for (;;)
     {
-        Message *msg = obj->outputQueue.get();
-        if (obj->writeDelimitedTo(*msg))
+        Message *msg = this->outputQueue.get();
+        if (this->writeDelimitedTo(*msg))
             ; // failed to write - missing handler
-    }*/
+        opool.put(msg);
+    }
 }
 
 bool CodedStream::get(Message &message)
 {
     Message *msg = inputQueue.get();
     message.CopyFrom(*msg);
+    ipool.put(msg);
     return true;
 }
 
 bool CodedStream::put(const Message &message)
 {
-    /*Message *msg = outputMessageAllocator();
+    Message *msg = opool.get();
     msg->CopyFrom(message);
-    outputQueue.put(msg);*/
+    outputQueue.put(msg);
     return true;
 }
 
