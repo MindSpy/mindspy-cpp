@@ -68,7 +68,8 @@ private:
     bool readDelimitedFrom(Message &);
     bool writeDelimitedTo(const Message &);
 
-    ObjectPool<int> objpool;
+    ObjectPool<Message> ipool;
+    ObjectPool<Message> opool;
 };
 
 } // namespace

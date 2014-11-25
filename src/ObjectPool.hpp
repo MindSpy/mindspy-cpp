@@ -23,7 +23,7 @@ public:
      * \brief Constructor. Create object pool with size object.
      * \param size object pool.
      */
-    ObjectPool(std::size_t size = defaultsize);
+    ObjectPool(std::size_t size);
     // Disable copy and assignment constructor.
     ObjectPool(const ObjectPool<T>& source) = delete;
     ObjectPool<T>& operator = (const ObjectPool<T>& source) = delete;
@@ -31,13 +31,13 @@ public:
     /*!
      * Reserves an object for use. Clients must not free the object!
      */
-    std::shared_ptr<T> acquireObject();
+    std::shared_ptr<T> get();
 
     /*!
      * Returns the object to the pool. Clients must not use the object after
      * it has been returned to the pool.
      */
-    void releaseObject(std::shared_ptr<T> obj);
+    void put(std::shared_ptr<T> obj);
 
 
 protected:
@@ -45,12 +45,7 @@ protected:
     /*!
      * \brief stores the objects.
      */
-    std::queue<std::shared_ptr<T>> pool;
-
-    /*!
-     * \brief Default size object pool.
-     */
-    static const std::size_t defaultsize = 10;
+    std::deque<std::shared_ptr<T>> pool;
 
     /*!
      * \brief Local size object;
@@ -68,9 +63,6 @@ protected:
     std::size_t sizepool() { return pool.size(); }
 };
 
-template<typename T>
-const size_t ObjectPool<T>::defaultsize;
-
 template <typename T>
 ObjectPool<T>::ObjectPool(std::size_t size)
 {
@@ -83,7 +75,7 @@ ObjectPool<T>::ObjectPool(std::size_t size)
 }
 
 template <typename T>
-std::shared_ptr<T> ObjectPool<T>::acquireObject()
+std::shared_ptr<T> ObjectPool<T>::get()
 {
     if (pool.empty())
     {
@@ -97,7 +89,7 @@ std::shared_ptr<T> ObjectPool<T>::acquireObject()
 }
 
 template <typename T>
-void ObjectPool<T>::releaseObject(std::shared_ptr<T> obj)
+void ObjectPool<T>::put(std::shared_ptr<T> obj)
 {
     pool.push(obj);
 }
