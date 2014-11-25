@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <condition_variable>
+#include <memory>
 
 namespace mindspy {
 
@@ -28,7 +29,7 @@ public:
      * \brief Remove element from queue.
      * \return element that has been removed
      */
-    T get()
+    std::unique_ptr<T> get()
     {
         // acquire lock
         std::unique_lock<std::mutex> lock(mutex);
@@ -43,7 +44,7 @@ public:
      * \brief Remove element from queue.
      * \param element that has been removed
      */
-    void get(T& element)
+    void get(std::unique_ptr<T> element)
     {
         element = get();
     }
@@ -52,7 +53,7 @@ public:
      * \brief Add element to queue.
      * \param element to be added
      */
-    void put(T element)
+    void put(std::unique_ptr<T> element)
     {
         // acquire lock
         std::unique_lock<std::mutex> lock(mutex);
@@ -80,8 +81,8 @@ public:
     }
 
 protected:
-    virtual void push_nolock(T &element) = 0;
-    virtual T pop_nolock() = 0;
+    virtual void push_nolock(std::unique_ptr<T> &element) = 0;
+    virtual std::unique_ptr<T> pop_nolock() = 0;
     virtual bool empty_nolock() = 0;
     virtual bool full_nolock() = 0;
 
