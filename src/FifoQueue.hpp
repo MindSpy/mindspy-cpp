@@ -35,7 +35,6 @@ protected:
         return container.empty();
     }
 
-
     bool full_nolock()
     {
         return container.size() <= container.max_size();

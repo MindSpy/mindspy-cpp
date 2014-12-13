@@ -1,6 +1,7 @@
 #ifndef STREAM_HPP
 #define STREAM_HPP
 
+#include <inttypes.h>
 #include <google/protobuf/message.h>
 
 namespace mindspy
@@ -22,7 +23,7 @@ public:
     /*!
      * Put message to the stream.
      */
-    virtual bool get(Message&, ::google::protobuf::uint32) = 0;
+    virtual bool get(Message&, uint32_t) = 0;
 
     /*!
      * Get message from stream.

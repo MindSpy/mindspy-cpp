@@ -1,6 +1,7 @@
 #ifndef MATCHINGSTREAM_HPP
 #define MATCHINGSTREAM_HPP
 
+#include <inttypes.h>
 #include "Stream.hpp"
 #include "CodedStream.hpp"
 
@@ -21,7 +22,7 @@ public:
     bool get(Message&);
 
     // Put to output queue
-    bool get(Message&, ::google::protobuf::uint32);
+    bool get(Message&, uint32_t);
 
     // Get from input queue
     bool put(const Message& message);

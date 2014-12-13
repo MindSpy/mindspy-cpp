@@ -11,7 +11,7 @@ MatchingStream::~MatchingStream()
 {
 }
 
-bool MatchingStream::get(Message& message, ::google::protobuf::uint32 reqid)
+bool MatchingStream::get(Message& message, uint32_t reqid)
 {
     return stream->get(message);
 }

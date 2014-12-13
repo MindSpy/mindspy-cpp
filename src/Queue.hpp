@@ -29,7 +29,7 @@ public:
      * \brief Remove element from queue.
      * \return element that has been removed
      */
-    std::unique_ptr<T> get()
+    T& get()
     {
         // acquire lock
         std::unique_lock<std::mutex> lock(mutex);
