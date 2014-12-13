@@ -17,12 +17,17 @@ public:
     /*!
      * Put message to the stream.
      */
-    virtual bool get(Message& message) = 0;
+    virtual bool get(Message& ) = 0;
+
+    /*!
+     * Put message to the stream.
+     */
+    virtual bool get(Message&, ::google::protobuf::uint32) = 0;
 
     /*!
      * Get message from stream.
      */
-    virtual bool put(const Message& message) = 0;
+    virtual bool put(const Message&) = 0;
 
 };
 

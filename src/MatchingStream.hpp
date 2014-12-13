@@ -18,7 +18,10 @@ public:
     virtual ~MatchingStream();
 
     // Put to output queue
-    bool get(Message& message);
+    bool get(Message&);
+
+    // Put to output queue
+    bool get(Message&, ::google::protobuf::uint32);
 
     // Get from input queue
     bool put(const Message& message);

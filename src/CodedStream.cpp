@@ -5,76 +5,40 @@ namespace mindspy
 
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
     rawStreamInput(new IstreamInputStream(&in)),
-    rawStreamOutput(new OstreamOutputStream(&out)),
-    inputThread(new std::thread(&CodedStream::inputTask, this)),
-    outputThread(new std::thread(&CodedStream::outputTask, this)),
-    ipool(100),opool(100)
-
+    rawStreamOutput(new OstreamOutputStream(&out))
 {
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
     rawStreamInput(new FileInputStream(ifd)),
-    rawStreamOutput(new FileOutputStream(ofd)),
-    inputThread(new std::thread(&CodedStream::inputTask, this)),
-    outputThread(new std::thread(&CodedStream::outputTask, this)),
-    ipool(100),opool(100)
-
+    rawStreamOutput(new FileOutputStream(ofd))
 {
 }
 
 
 CodedStream::~CodedStream()
 {
-   inputThread->detach();
-   outputThread->detach();
-
-   delete rawStreamInput;
-   delete rawStreamOutput;
+    delete rawStreamInput;
+    delete rawStreamOutput;
 }
 
-void CodedStream::inputTask ()
+bool CodedStream::get(Message& message)
 {
-    std::cout << "Hello input thread" << std::endl;
-    for (;;)
-    {
-        Message *msg = ipool.get();
-        if (this->readDelimitedFrom(*msg))
-            ; // failed to read - missing handler
-        this->inputQueue.put(msg);
-    }
+    return readDelimitedFrom(message);
 }
 
-void CodedStream::outputTask ()
+bool CodedStream::get(Message& message, ::google::protobuf::uint32 reqid)
 {
-    std::cout << "Hello input thread" << std::endl;
-    for (;;)
-    {
-        Message *msg = this->outputQueue.get();
-        if (this->writeDelimitedTo(*msg))
-            ; // failed to write - missing handler
-        opool.put(msg);
-    }
+    return get(message);
 }
 
-bool CodedStream::get(Message &message)
+bool CodedStream::put(const Message& message)
 {
-    Message *msg = inputQueue.get();
-    message.CopyFrom(*msg);
-    ipool.put(msg);
-    return true;
-}
-
-bool CodedStream::put(const Message &message)
-{
-    Message *msg = opool.get();
-    msg->CopyFrom(message);
-    outputQueue.put(msg);
-    return true;
+    return writeDelimitedTo(message);
 }
 
 // call in input thread
-bool CodedStream::readDelimitedFrom(Message &message) {
+bool CodedStream::readDelimitedFrom(Message& message) {
     // We create a new coded stream for each message.  Don't worry, this is fast,
     // and it makes sure the 64MB total size limit is imposed per-message rather
     // than on the whole stream.  (See the CodedInputStream interface for more
@@ -102,7 +66,7 @@ bool CodedStream::readDelimitedFrom(Message &message) {
 }
 
 // call in output thread
-bool CodedStream::writeDelimitedTo(const Message &message) {
+bool CodedStream::writeDelimitedTo(const Message& message) {
     // We create a new coded stream for each message.  Don't worry, this is fast.
     CodedOutputStream output(rawStreamOutput);
 

@@ -11,9 +11,14 @@ MatchingStream::~MatchingStream()
 {
 }
 
-bool MatchingStream::get(Message& message)
+bool MatchingStream::get(Message& message, ::google::protobuf::uint32 reqid)
 {
     return stream->get(message);
+}
+
+bool MatchingStream::get(Message& message)
+{
+    throw ;
 }
 
 bool MatchingStream::put(const Message& message)

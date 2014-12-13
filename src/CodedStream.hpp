@@ -46,30 +46,17 @@ public:
 
     virtual ~CodedStream();
 
-    bool get(Message &);
-    bool put(const Message &);
+    bool get(Message&);
+    bool get(Message&, ::google::protobuf::uint32 );
+    bool put(const Message&);
 
 private:
 
     ZeroCopyInputStream *rawStreamInput;
     ZeroCopyOutputStream *rawStreamOutput;
 
-    FifoQueue<Message*> inputQueue;
-    FifoQueue<Message*> outputQueue;
-
-    std::thread *inputThread;
-    std::thread *outputThread;
-
-    // response
-    void inputTask();
-    // reqest
-    void outputTask();
-
-    bool readDelimitedFrom(Message &);
-    bool writeDelimitedTo(const Message &);
-
-    ObjectPool<Message> ipool;
-    ObjectPool<Message> opool;
+    bool readDelimitedFrom(Message&);
+    bool writeDelimitedTo(const Message&);
 };
 
 } // namespace

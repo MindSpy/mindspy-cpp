@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
 
     ms.put(req);
 
-    ms.get(resp);
+    ms.get(resp, req.reqid());
 
     std::cout << "Response { " << resp.ShortDebugString() << " }" << std::endl;
 
