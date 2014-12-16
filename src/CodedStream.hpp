@@ -56,8 +56,8 @@ private:
     int ifd;
     int ofd;
 
-    istream *is;
-    ostream *os;
+    istream *is = NULL;
+    ostream *os = NULL;
 
     bool readDelimitedFrom(Message&);
     bool writeDelimitedTo(const Message&);
