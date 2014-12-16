@@ -4,22 +4,19 @@ namespace mindspy
 {
 
 CodedStream::CodedStream(std::istream &in, std::ostream &out) :
-    rawStreamInput(new IstreamInputStream(&in)),
-    rawStreamOutput(new OstreamOutputStream(&out))
+    is(&in), os(&out)
 {
 }
 
 CodedStream::CodedStream(int ifd, int ofd) :
-    rawStreamInput(new FileInputStream(ifd)),
-    rawStreamOutput(new FileOutputStream(ofd))
+    ifd(ifd), ofd(ofd)
 {
 }
 
 
+
 CodedStream::~CodedStream()
 {
-    delete rawStreamInput;
-    delete rawStreamOutput;
 }
 
 bool CodedStream::get(Message& message)
@@ -27,7 +24,7 @@ bool CodedStream::get(Message& message)
     return readDelimitedFrom(message);
 }
 
-bool CodedStream::get(Message& message, ::google::protobuf::uint32 reqid)
+bool CodedStream::get(Message& message, uint32_t reqid)
 {
     return get(message);
 }
@@ -43,10 +40,14 @@ bool CodedStream::readDelimitedFrom(Message& message) {
     // and it makes sure the 64MB total size limit is imposed per-message rather
     // than on the whole stream.  (See the CodedInputStream interface for more
     // info on this limit.)
-    CodedInputStream input(rawStreamInput);
+    ZeroCopyInputStream* zero;
+    if (is) zero = new IstreamInputStream(is);
+    else zero = new FileInputStream(ifd);
+    {
+    CodedInputStream input(zero);
 
     // Read the size.
-    uint32_t size;
+    uint32_t size = 0;
     if (!input.ReadVarint32(&size))
         return false;
 
@@ -61,14 +62,20 @@ bool CodedStream::readDelimitedFrom(Message& message) {
 
     // Release the limit.
     input.PopLimit(limit);
-
+    }
+    delete zero;
     return true;
 }
 
 // call in output thread
 bool CodedStream::writeDelimitedTo(const Message& message) {
     // We create a new coded stream for each message.  Don't worry, this is fast.
-    CodedOutputStream output(rawStreamOutput);
+    ZeroCopyOutputStream* zero;
+    if (os) zero = new OstreamOutputStream(os);
+    else zero = new FileOutputStream(ofd);
+    {
+    //OstreamOutputStream zero(os);
+    CodedOutputStream output(zero);
 
     // Write the size.
     const uint32_t size = message.ByteSize();
@@ -79,8 +86,10 @@ bool CodedStream::writeDelimitedTo(const Message& message) {
     message.SerializeToCodedStream(&output);
     if (output.HadError())
         return false;
-
+    }
+    delete zero;
     return true;
+
 }
 
 }

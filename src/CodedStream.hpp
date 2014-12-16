@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+#include <inttypes.h>
 
 #include "Stream.hpp"
 #include "FifoQueue.hpp"
@@ -47,13 +48,16 @@ public:
     virtual ~CodedStream();
 
     bool get(Message&);
-    bool get(Message&, ::google::protobuf::uint32 );
+    bool get(Message&, uint32_t);
     bool put(const Message&);
 
 private:
 
-    ZeroCopyInputStream *rawStreamInput;
-    ZeroCopyOutputStream *rawStreamOutput;
+    int ifd;
+    int ofd;
+
+    istream *is;
+    ostream *os;
 
     bool readDelimitedFrom(Message&);
     bool writeDelimitedTo(const Message&);
