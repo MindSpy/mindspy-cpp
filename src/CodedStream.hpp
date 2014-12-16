@@ -3,8 +3,6 @@
 
 #include <istream>
 #include <iostream>
-#include <memory>
-#include <thread>
 #include <inttypes.h>
 
 #include "Stream.hpp"
@@ -56,8 +54,11 @@ private:
     int ifd;
     int ofd;
 
-    istream *is = NULL;
-    ostream *os = NULL;
+    std::istream *is = nullptr;
+    std::ostream *os = nullptr;
+
+    ZeroCopyInputStream* inputStream = nullptr;
+    ZeroCopyOutputStream* outputStream = nullptr;
 
     bool readDelimitedFrom(Message&);
     bool writeDelimitedTo(const Message&);
