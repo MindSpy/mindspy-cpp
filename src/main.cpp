@@ -36,23 +36,25 @@ uint64_t reqid()
 int main(int argc, char * argv[])
 {
     Subprocess sub("../firmware/test/server");
-    CodedStream cs(sub.ifd(), sub.ofd());
-    MatchingStream ms(&cs);
 
-    Request req;
-    Response resp;
+    {
+        CodedStream cs(sub.ifd(), sub.ofd());
+        MatchingStream ms(&cs);
 
-    req.Clear();
-    req.set_timestamp(timestamp());
-    req.set_reqid(reqid());
+        Request req;
+        Response resp;
 
-    std::cout << "Request { " << req.ShortDebugString() << " }"  << std::endl;
+        req.Clear();
+        req.set_timestamp(timestamp());
+        req.set_reqid(reqid());
 
-    ms.put(req);
+        std::cout << "Request { " << req.ShortDebugString() << " }"  << std::endl;
 
-    ms.get(resp, req.reqid());
+        ms.put(req);
 
-    std::cout << "Response { " << resp.ShortDebugString() << " }" << std::endl;
+        ms.get(resp, req.reqid());
 
+        std::cout << "Response { " << resp.ShortDebugString() << " }" << std::endl;
+    }
     return 0;
 }
