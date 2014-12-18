@@ -1,7 +1,7 @@
 
 #include "Subprocess.hpp"
 
-#include "CodedStream.hpp"
+#include "FileCodedStream.hpp"
 #include "Subprocess.hpp"
 #include "MatchingStream.hpp"
 #include "Proto.hpp"
@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <inttypes.h>
 
 using namespace google::protobuf;
 using namespace mindspy::protobufs;
@@ -38,7 +39,7 @@ int main(int argc, char * argv[])
     Subprocess sub("../firmware/test/server");
 
     {
-        CodedStream cs(sub.ifd(), sub.ofd());
+        FileCodedStream cs(sub.ifd(), sub.ofd());
         MatchingStream ms(&cs);
 
         Request req;

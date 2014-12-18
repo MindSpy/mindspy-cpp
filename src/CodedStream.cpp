@@ -3,51 +3,13 @@
 namespace mindspy
 {
 
-CodedStream::CodedStream(std::istream &in, std::ostream &out) :
-    is(&in), os(&out)
-{
-}
-
-CodedStream::CodedStream(int ifd, int ofd) :
-    ifd(ifd), ofd(ofd)
-{
-}
-
 CodedStream::~CodedStream()
 {
-}
-
-bool CodedStream::get(Message& message)
-{
-    return readDelimitedFrom(message);
 }
 
 bool CodedStream::get(Message& message, uint32_t reqid)
 {
     return get(message);
-}
-
-bool CodedStream::put(const Message& message)
-{
-    return writeDelimitedTo(message);
-}
-
-
-bool CodedStream::readDelimitedFrom(Message& message) {
-    if (is != nullptr)
-    {
-        IstreamInputStream rawStream(is);
-        return readDelimitedFrom(message, rawStream);
-    }
-    else if (ifd != -1)
-    {
-        FileInputStream rawStream(ifd);
-        return readDelimitedFrom(message, rawStream);
-    }
-    else
-    {
-        return false;
-    }
 }
 
 bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawStream) {
@@ -83,25 +45,6 @@ bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawSt
     return true;
 }
 
-
-bool CodedStream::writeDelimitedTo(const Message& message) {
-    if (os != nullptr)
-    {
-        OstreamOutputStream rawStream(os);
-        return writeDelimitedTo(message, rawStream);
-    }
-    else if (ofd != -1)
-    {
-        FileOutputStream rawStream(ofd);
-        return writeDelimitedTo(message, rawStream);
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// call in output thread
 bool CodedStream::writeDelimitedTo(const Message& message, ZeroCopyOutputStream& rawStream) {
     // We create a new coded stream for each message.  Don't worry, this is fast.
     CodedOutputStream output(&rawStream);
