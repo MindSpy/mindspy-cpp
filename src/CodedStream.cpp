@@ -12,7 +12,8 @@ bool CodedStream::get(Message& message, uint32_t reqid)
     return get(message);
 }
 
-bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawStream) {
+bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawStream)
+{
     // We create a new coded stream for each message.  Don't worry, this is fast,
     // and it makes sure the 64MB total size limit is imposed per-message rather
     // than on the whole stream.  (See the CodedInputStream interface for more
@@ -45,7 +46,8 @@ bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawSt
     return true;
 }
 
-bool CodedStream::writeDelimitedTo(const Message& message, ZeroCopyOutputStream& rawStream) {
+bool CodedStream::writeDelimitedTo(const Message& message, ZeroCopyOutputStream& rawStream)
+{
     // We create a new coded stream for each message.  Don't worry, this is fast.
     CodedOutputStream output(&rawStream);
 

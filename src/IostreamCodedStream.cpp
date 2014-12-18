@@ -3,6 +3,11 @@
 namespace mindspy
 {
 
+IostreamCodedStream::~IostreamCodedStream()
+{
+
+}
+
 IostreamCodedStream::IostreamCodedStream(std::istream &in, std::ostream &out) :
     is(&in), os(&out)
 {

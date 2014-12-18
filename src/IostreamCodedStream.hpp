@@ -31,11 +31,13 @@ public:
      * \param out - output stream.
      */
     IostreamCodedStream(std::istream &, std::ostream &);
+    virtual IostreamCodedStream();
 
     bool get(Message&);
     bool put(const Message&);
 
 private:
+
     std::istream *is;
     std::ostream *os;
 };

@@ -24,6 +24,7 @@ using namespace google::protobuf::io;
 class CodedStream : public Stream
 {
 public:
+
     virtual ~CodedStream();
 
     bool get(Message&, uint32_t);
@@ -32,6 +33,7 @@ public:
     virtual bool put(const Message&) = 0;
 
 protected:
+
     bool readDelimitedFrom(Message&, ZeroCopyInputStream&);
     bool writeDelimitedTo(const Message&, ZeroCopyOutputStream&);
 

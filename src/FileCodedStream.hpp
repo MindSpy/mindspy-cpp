@@ -24,18 +24,37 @@ using namespace google::protobuf::io;
 class FileCodedStream : public CodedStream
 {
 public:
+
     /*!
      * \brief Constructor. Parameters set value descriptor.
      * \param ifd - input file destcriptor.
      * \param ofd - outpus file destriptor.
      */
     FileCodedStream(int ifd, int ofd);
+    virtual ~FileCodedStream();
 
+    /*!
+     * \brief To process message and return processing stage.
+     * \return true or false
+     */
     bool get(Message&);
+
+    /*!
+     * \brief Put message and to process message and return processing stage.
+     * \return true or false
+     */
     bool put(const Message&);
 
 private:
+
+    /*!
+     * \brief Input file descriptor.
+     */
     int ifd;
+
+    /*!
+     * \brief Output file descriptor.
+     */
     int ofd;
 };
 
