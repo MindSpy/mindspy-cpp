@@ -1,11 +1,7 @@
 #ifndef CODEDSTREAM_HPP
 #define CODEDSTREAM_HPP
 
-#include <istream>
-#include <iostream>
 #include <inttypes.h>
-
-#include "Stream.hpp"
 
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream.h>
@@ -19,15 +15,13 @@ using namespace google::protobuf::io;
 
 
 /*!
- * The class for nonblocking read and write.
+ * The class for conversions between objects and serialized messages
  */
-class CodedStream : public Stream
+class CodedStream
 {
 public:
 
     virtual ~CodedStream();
-
-    bool get(Message&, uint32_t);
 
     virtual bool get(Message&) = 0;
     virtual bool put(const Message&) = 0;

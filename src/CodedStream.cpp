@@ -7,11 +7,6 @@ CodedStream::~CodedStream()
 {
 }
 
-bool CodedStream::get(Message& message, uint32_t reqid)
-{
-    return get(message);
-}
-
 bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawStream)
 {
     // We create a new coded stream for each message.  Don't worry, this is fast,

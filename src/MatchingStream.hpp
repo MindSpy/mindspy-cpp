@@ -2,34 +2,36 @@
 #define MATCHINGSTREAM_HPP
 
 #include <inttypes.h>
-#include "Stream.hpp"
 #include "CodedStream.hpp"
+#include "Proto.hpp"
 
 #include <google/protobuf/message.h>
 
 namespace mindspy
 {
 
-class MatchingStream : public Stream
+using namespace mindspy::protobufs;
+
+class MatchingStream
 {
 public:
 
-    MatchingStream(Stream* stream);
+    MatchingStream(CodedStream*);
 
     virtual ~MatchingStream();
 
     // Put to output queue
-    bool get(Message&);
+    bool get(Response&, const uint32_t);
 
     // Put to output queue
-    bool get(Message&, uint32_t);
+    bool get(Response&, const Request&);
 
     // Get from input queue
-    bool put(const Message& message);
+    bool put(const Request&);
 
 private:
 
-    Stream* stream;
+    CodedStream* stream;
 };
 
 } // namespace

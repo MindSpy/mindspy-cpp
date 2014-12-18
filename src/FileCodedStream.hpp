@@ -1,8 +1,6 @@
 #ifndef FILECODEDSTREAM_HPP
 #define FILECODEDSTREAM_HPP
 
-#include <istream>
-#include <iostream>
 #include <inttypes.h>
 
 #include "CodedStream.hpp"

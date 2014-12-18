@@ -1,9 +1,13 @@
 #include "MatchingStream.hpp"
 
+#include "Proto.hpp"
+
 namespace  mindspy
 {
 
-MatchingStream::MatchingStream(Stream* s) : stream(s)
+using namespace mindspy::protobufs;
+
+MatchingStream::MatchingStream(CodedStream* s) : stream(s)
 {
 }
 
@@ -11,17 +15,25 @@ MatchingStream::~MatchingStream()
 {
 }
 
-bool MatchingStream::get(Message& message, uint32_t reqid)
+bool MatchingStream::get(Response& message, const uint32_t reqid)
 {
-    return stream->get(message);
+    bool result;
+
+    do
+    {
+        result = stream->get(message);
+    }
+    while (message.reqid() != reqid);
+
+    return result;
 }
 
-bool MatchingStream::get(Message& message)
+bool MatchingStream::get(Response& message, const Request& req)
 {
-    throw ;
+    return get(message, req.reqid());
 }
 
-bool MatchingStream::put(const Message& message)
+bool MatchingStream::put(const Request& message)
 {
     return stream->put(message);
 }
