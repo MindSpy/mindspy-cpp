@@ -34,24 +34,28 @@ bool CodedStream::put(const Message& message)
 
 
 bool CodedStream::readDelimitedFrom(Message& message) {
-    ZeroCopyInputStream* rawStream = nullptr;
     if (is != nullptr)
-        rawStream = new IstreamInputStream(is);
+    {
+        IstreamInputStream rawStream(is);
+        return readDelimitedFrom(message, rawStream);
+    }
     else if (ifd != -1)
-        rawStream = new FileInputStream(ifd);
+    {
+        FileInputStream rawStream(ifd);
+        return readDelimitedFrom(message, rawStream);
+    }
     else
+    {
         return false;
-    bool result =  readDelimitedFrom(message, rawStream);
-    delete rawStream;
-    return result;
+    }
 }
 
-bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream* rawStream) {
+bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream& rawStream) {
     // We create a new coded stream for each message.  Don't worry, this is fast,
     // and it makes sure the 64MB total size limit is imposed per-message rather
     // than on the whole stream.  (See the CodedInputStream interface for more
     // info on this limit.)
-    CodedInputStream input(rawStream);
+    CodedInputStream input(&rawStream);
 
     // Read the size.
     uint32_t size = 0;
@@ -81,29 +85,26 @@ bool CodedStream::readDelimitedFrom(Message& message, ZeroCopyInputStream* rawSt
 
 
 bool CodedStream::writeDelimitedTo(const Message& message) {
-    ZeroCopyOutputStream* rawStream = nullptr;
     if (os != nullptr)
     {
-        rawStream = new OstreamOutputStream(os);
+        OstreamOutputStream rawStream(os);
+        return writeDelimitedTo(message, rawStream);
     }
     else if (ofd != -1)
     {
-        rawStream = new FileOutputStream(ofd);
+        FileOutputStream rawStream(ofd);
+        return writeDelimitedTo(message, rawStream);
     }
     else
     {
         return false;
     }
-    bool result =  writeDelimitedTo(message, rawStream);
-    delete rawStream;
-    return result;
 }
 
 // call in output thread
-bool CodedStream::writeDelimitedTo(const Message& message, ZeroCopyOutputStream* rawStream) {
+bool CodedStream::writeDelimitedTo(const Message& message, ZeroCopyOutputStream& rawStream) {
     // We create a new coded stream for each message.  Don't worry, this is fast.
-    //OstreamOutputStream zero(os);
-    CodedOutputStream output(rawStream);
+    CodedOutputStream output(&rawStream);
 
     // Write the size.
     const uint32_t size = message.ByteSize();

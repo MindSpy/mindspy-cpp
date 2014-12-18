@@ -60,8 +60,8 @@ private:
     bool readDelimitedFrom(Message&);
     bool writeDelimitedTo(const Message&);
 
-    bool readDelimitedFrom(Message&, ZeroCopyInputStream*);
-    bool writeDelimitedTo(const Message&, ZeroCopyOutputStream*);
+    bool readDelimitedFrom(Message&, ZeroCopyInputStream&);
+    bool writeDelimitedTo(const Message&, ZeroCopyOutputStream&);
 
 };
 
