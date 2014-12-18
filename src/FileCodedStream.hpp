@@ -35,8 +35,8 @@ public:
     bool put(const Message&);
 
 private:
-    int ifd = -1;
-    int ofd = -1;
+    int ifd;
+    int ofd;
 };
 
 } // namespace

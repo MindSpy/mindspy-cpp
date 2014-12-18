@@ -27,6 +27,7 @@ public:
     virtual ~CodedStream();
 
     bool get(Message&, uint32_t);
+
     virtual bool get(Message&) = 0;
     virtual bool put(const Message&) = 0;
 
