@@ -51,17 +51,18 @@ public:
 
 private:
 
-    int ifd;
-    int ofd;
+    int ifd = -1;
+    int ofd = -1;
 
     std::istream *is = nullptr;
     std::ostream *os = nullptr;
 
-    ZeroCopyInputStream* inputStream = nullptr;
-    ZeroCopyOutputStream* outputStream = nullptr;
-
     bool readDelimitedFrom(Message&);
     bool writeDelimitedTo(const Message&);
+
+    bool readDelimitedFrom(Message&, ZeroCopyInputStream*);
+    bool writeDelimitedTo(const Message&, ZeroCopyOutputStream*);
+
 };
 
 } // namespace
