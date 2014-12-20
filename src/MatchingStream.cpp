@@ -19,9 +19,24 @@ bool MatchingStream::get(Response& message, const uint32_t reqid)
 {
     bool result;
 
-    do
+    // TODO
+    // * check key-value structure and return result if present
+    // * .,...
+
+    while (true)
     {
         result = stream->get(message);
+        if (message.reqid() == requid)
+        {
+            break;
+        }
+        else
+        {
+            // TODO
+            // * store in key-value structure
+            // * prune old records based on timestamp
+            // * involve object pool to control creation of the objects
+        }
     }
     while (message.reqid() != reqid);
 
