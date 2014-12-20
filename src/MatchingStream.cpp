@@ -5,8 +5,6 @@
 namespace  mindspy
 {
 
-using namespace mindspy::protobufs;
-
 MatchingStream::MatchingStream(CodedStream* s) : stream(s)
 {
 }
@@ -15,13 +13,14 @@ MatchingStream::~MatchingStream()
 {
 }
 
-bool MatchingStream::get(Response& message, const uint32_t reqid)
+bool MatchingStream::get(protobufs::Response& message, const uint32_t reqid)
 {
-    bool result;
+    bool result = false;
 
     // TODO
     // * check key-value structure and return result if present
     // * .,...
+    // message.CopyFrom(storedMessage);
 
     while (true)
     {
@@ -38,17 +37,16 @@ bool MatchingStream::get(Response& message, const uint32_t reqid)
             // * involve object pool to control creation of the objects
         }
     }
-    while (message.reqid() != reqid);
 
     return result;
 }
 
-bool MatchingStream::get(Response& message, const Request& req)
+bool MatchingStream::get(protobufs::Response& message, const protobufs::Request& req)
 {
     return get(message, req.reqid());
 }
 
-bool MatchingStream::put(const Request& message)
+bool MatchingStream::put(const protobufs::Request& message)
 {
     return stream->put(message);
 }

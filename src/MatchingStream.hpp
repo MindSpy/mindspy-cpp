@@ -10,8 +10,6 @@
 namespace mindspy
 {
 
-using namespace mindspy::protobufs;
-
 class MatchingStream
 {
 public:
@@ -21,13 +19,13 @@ public:
     virtual ~MatchingStream();
 
     // Put to output queue
-    bool get(Response&, const uint32_t);
+    bool get(protobufs::Response&, const uint32_t);
 
     // Put to output queue
-    bool get(Response&, const Request&);
+    bool get(protobufs::Response&, const protobufs::Request&);
 
     // Get from input queue
-    bool put(const Request&);
+    bool put(const protobufs::Request&);
 
 private:
 
