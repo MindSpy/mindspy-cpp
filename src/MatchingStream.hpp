@@ -14,17 +14,25 @@ class MatchingStream
 {
 public:
 
+    /*!
+     * \brief Constructor.
+     */
     MatchingStream(CodedStream*);
+    ~MatchingStream();
 
-    virtual ~MatchingStream();
-
-    // Put to output queue
+    /*!
+     *  Put to output queue.
+     */
     bool get(protobufs::Response&, const uint32_t);
 
-    // Put to output queue
+    /*!
+     * Put to output queue.
+     */
     bool get(protobufs::Response&, const protobufs::Request&);
 
-    // Get from input queue
+    /*!
+     * Get from input queue.
+     */
     bool put(const protobufs::Request&);
 
 private:

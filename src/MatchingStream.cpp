@@ -25,7 +25,7 @@ bool MatchingStream::get(protobufs::Response& message, const uint32_t reqid)
     while (true)
     {
         result = stream->get(message);
-        if (message.reqid() == requid)
+        if (message.reqid() == reqid)
         {
             break;
         }

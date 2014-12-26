@@ -71,6 +71,8 @@ ObjectPool<T>::ObjectPool(std::size_t size)
         throw std::invalid_argument("Size must be positive");
     }
 
+    this->size = size;
+
     allocate();
 }
 
